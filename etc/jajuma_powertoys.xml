@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author    JaJuMa GmbH <info@jajuma.de>
+ * @copyright Copyright (c) 2023 JaJuMa GmbH <https://www.jajuma.de>. All rights reserved.
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+
+<powertoys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Jajuma_PowerToys:etc/jajuma_powertoys.xsd">
+    <dashboard id="core_web_vitals" class="Jajuma\PotCoreWebVitals\Block\CoreWebVitals">
+        <label translate="true">Core Web Vitals</label>
+        <arguments>
+            <argument name="enable">true</argument>
+            <argument name="template">Jajuma_PotCoreWebVitals::corewebvitals.phtml</argument>
+        </arguments>
+    </dashboard>
+</powertoys>

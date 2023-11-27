@@ -1,0 +1,180 @@
+<?php
+/**
+ * @author    JaJuMa GmbH <info@jajuma.de>
+ * @copyright Copyright (c) 2023 JaJuMa GmbH <https://www.jajuma.de>. All rights reserved.
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+
+use Jajuma\PowerToys\Block\PowerToys\QuickAction;
+use Magento\Framework\Escaper;
+
+/** @var QuickAction $block */
+/** @var Escaper $escaper */
+?>
+<div class="pot-wave"></div>
+<div class="pot-wave"></div>
+<div class="pot-wave"></div>
+<div class="<?= $block->getBlockId() ?>">
+    <span class="powertoys-widget-title title-transparent"><?= $block->getName() ?></span>
+    <div class="<?= $block->getBlockId() ?>-wrapper">
+        <div class="jajuma-cwv-criteria">CLS: <span data-cls>Waiting</span></div>
+        <div class="jajuma-cwv-criteria">FID: <span data-fid>Waiting</span></div>
+        <div class="jajuma-cwv-criteria">LCP: <span data-lcp>Waiting</span></div>
+        <div class="jajuma-cwv-criteria">FCP: <span data-fcp>Waiting</span></div>
+        <div class="jajuma-cwv-criteria">INP: <span data-inp>Waiting</span></div>
+        <div class="jajuma-cwv-criteria">TTFB: <span data-ttfb>Waiting</span></div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const setValue = (target, data) => {
+            //console.log(data);
+            var score = data.value;
+            if (target === 'data-cls') {
+                score = score.toFixed(3);
+            }
+            if (target === 'data-inp') {
+                score += "ms";
+            }
+            if (target === 'data-fid') {
+                score = score.toFixed(0);
+                score += "ms";
+            }
+            if ((target === 'data-ttfb') || (target === 'data-fcp') || (target === 'data-lcp')) {
+                score = score / 1000;
+                score = score.toFixed(3);
+                score += "s";
+            }
+            var html = `${score}`
+            document.querySelector(`.<?= $block->getBlockId() ?> [${target}]`).className = '';
+            if (data.rating) {
+                document.querySelector(`.<?= $block->getBlockId() ?> [${target}]`).classList.add(data.rating);
+            }
+            document.querySelector(`.<?= $block->getBlockId() ?> [${target}]`).innerHTML = html;
+        }
+
+        var script = document.createElement('script');
+        script.src = '<?= $block->getViewFileUrl('Jajuma_PotCoreWebVitals/js/cwv.js') ?>';
+        script.onload = function () {
+            webVitals.onCLS(data => {
+                setValue('data-cls', data)
+            }, {reportAllChanges: true});
+            webVitals.onFID(data => {
+                setValue('data-fid', data)
+            });
+            webVitals.onLCP(data => {
+                setValue('data-lcp', data)
+            });
+            webVitals.onFCP(data => {
+                setValue('data-fcp', data)
+            });
+            webVitals.onINP(data => {
+                setValue('data-inp', data)
+            }, {reportAllChanges: true});
+            webVitals.onTTFB(data => {
+                setValue('data-ttfb', data)
+            });
+        };
+        document.head.appendChild(script);
+    })();
+</script>
+<style>
+    .powertoys-dashboard-widgets .widget-item.widget-item-core_web_vitals {
+        margin: auto;
+        background: linear-gradient(315deg, rgb(42,121,255) 3%, rgb(13,206,107) 38%, rgb(255,164,0) 68%, rgb(255,78,66) 98%);
+        animation: gradient 15s ease infinite;
+        background-size: 400% 400%;
+        background-attachment: fixed;
+        overflow: hidden;
+    }
+    .<?= $block->getBlockId() ?> .<?= $block->getBlockId() ?>-wrapper {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 8px;
+    }
+    .<?= $block->getBlockId() ?> .<?= $block->getBlockId() ?>-wrapper > div > span {
+        font-weight: bold;
+    }
+    .<?= $block->getBlockId() ?> .<?= $block->getBlockId() ?>-wrapper > div > span.poor {
+        color: #ED5C4C;
+    }
+    .<?= $block->getBlockId() ?> .<?= $block->getBlockId() ?>-wrapper > div > span.needs-improvement {
+        color: #F3A73B;
+    }
+    .<?= $block->getBlockId() ?> .<?= $block->getBlockId() ?>-wrapper > div > span.good {
+        color: #5ECA75;
+    }
+    .widget-item-core_web_vitals .core_web_vitals {
+        z-index: 1;
+        position: relative;
+    }
+    .jajuma-cwv-criteria {
+        display: inline-flex;
+        padding: 8px;
+        background-color: #474747a3;
+        border-radius: 8px;
+        justify-content: space-between;
+        border: 1px solid rgb(239 239 239);
+        line-height: 20px;
+        color: #fff;
+    }
+    @keyframes gradient {
+        0% {
+            background-position: 0% 0%;
+        }
+        50% {
+            background-position: 100% 100%;
+        }
+        100% {
+            background-position: 0% 0%;
+        }
+    }
+
+    .pot-wave {
+        background: rgb(255 255 255 / 25%);
+        border-radius: 1000% 1000% 0 0;
+        position: absolute;
+        width: 200%;
+        height: 6em;
+        animation: pot-wave 10s -3s linear infinite;
+        transform: translate3d(0, 0, 0);
+        opacity: 0.8;
+        bottom: 0;
+        left: 0;
+    }
+
+    .pot-wave:nth-of-type(2) {
+        bottom: -1.25em;
+        animation: pot-wave 18s linear reverse infinite;
+        opacity: 0.8;
+    }
+
+    .pot-wave:nth-of-type(3) {
+        bottom: -2.5em;
+        animation: pot-wave 20s -1s reverse infinite;
+        opacity: 0.9;
+    }
+
+    @keyframes pot-wave {
+        2% {
+            transform: translateX(1);
+        }
+
+        25% {
+            transform: translateX(-25%);
+        }
+
+        50% {
+            transform: translateX(-50%);
+        }
+
+        75% {
+            transform: translateX(-25%);
+        }
+
+        100% {
+            transform: translateX(1);
+        }
+    }
+</style>

@@ -87,7 +87,7 @@ Install via composer as any other Magento extension from Github:
 composer require jajuma/pot-core-web-vitals
 ```
 
-## Using ChatGPT Power Toy For Magento
+## Using Core Web Vitals Power Toy For Magento
 
 After installing this module:  
 Go to   

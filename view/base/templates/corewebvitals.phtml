@@ -10,6 +10,8 @@ use Magento\Framework\Escaper;
 
 /** @var QuickAction $block */
 /** @var Escaper $escaper */
+$powerToysHelper = $this->helper(\Jajuma\PowerToys\Helper\Data::class);
+$nonce = $powerToysHelper->getNonce();
 ?>
 <div class="pot-wave"></div>
 <div class="pot-wave"></div>
@@ -26,7 +28,7 @@ use Magento\Framework\Escaper;
     </div>
 </div>
 
-<script>
+<script <?= $nonce ? 'nonce="' . $nonce . '"' : '' ?>>
     (function () {
         const setValue = (target, data) => {
             //console.log(data);
